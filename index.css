@@ -1,0 +1,621 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: linear-gradient(to bottom, white, black);
+  background-size: cover;
+  overflow-x: hidden; /* FIX: stop horizontal scroll caused by absolute video/slider elements */
+}
+
+#bg-video {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  min-width: 100%;
+  min-height: 100%;
+  z-index: -1;
+  object-fit: cover;
+}
+
+/* FIX: removed the unused ".bg-video" class rule that duplicated #bg-video and was never
+   applied to anything in the HTML (the <video> tag uses id="bg-video", not class="bg-video"). */
+
+.navbar {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 20px;
+  text-decoration: none;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 15px;
+  color: white;
+  font-weight: 500; /* FIX: was "120px", an invalid value for font-weight */
+  flex-wrap: wrap;  /* FIX: allow nav to wrap instead of clipping items at medium widths */
+  position: relative;
+  z-index: 100;
+}
+
+.left-navbar {
+  margin-right: auto;
+  display: flex;
+  align-items: center;
+}
+
+.left-navbar img {
+  height: clamp(20px, 20vh, 60px);
+  filter: brightness(10);
+}
+
+.middle-navbar {
+  display: flex;
+  align-items: center;
+}
+
+.mid-nav {
+  list-style-type: none;
+  display: flex;
+  margin: 20px auto;
+  column-gap: 40px;
+  backdrop-filter: blur(10px);
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.dropdown {
+  position: relative; 
+  transition: all 0.6s ease-in-out; }
+
+.dropBtn {
+  text-decoration: none;
+  color: white; 
+  font-size: clamp(12px, 5vh, 18px);
+  font-family: "Rubik", sans-serif; 
+  font-weight: 600;
+  position: relative;
+  display: inline-block;
+}
+
+.dropBtn::after {
+  content: "";
+  position: absolute;
+  bottom: 0px;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background-color: rgb(255, 255, 255);
+  transform: scaleX(0);
+  transition: transform 0.3s ease-out;
+}
+
+.dropBtn:hover {
+  transform: scale(1.05);
+}
+
+.dropBtn:hover::after {
+  transform: scaleX(1);
+}
+
+.contentBar {
+  display: none;
+  flex-direction: column;
+  padding: 10px 15px;
+  position: absolute;   
+  top: 100%;          
+  left: 0;
+  gap: 20px;
+  width: clamp(220px, 30vw, 400px);
+  backdrop-filter: blur(20px);
+  border-radius: 10px;
+  background: rgba(0, 0, 0, 0.75); 
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  transition: all 0.3s ease-out;
+  z-index: 50;
+}
+
+.contentBar p {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+.contentBar a {
+  font-size: clamp(12px, 2vh, 16px);
+  text-decoration: none;
+  color: white;
+  font-weight: 600; 
+  position: relative;
+  transform: scale(1);
+  transition: transform 0.3s ease-out;
+}
+
+.contentBar a::after {
+  content: "";
+  position: absolute;
+  bottom: 0px;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background-color: rgb(255, 255, 255);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.3s ease-out;
+}
+
+.contentBar a:hover {
+  transform: scale(1.05);
+}
+
+.contentBar a:hover::after {
+  transform: scaleX(0.8);
+}
+
+.dropdown:hover .contentBar {
+  display: flex;
+}
+
+.right-navbar {
+  margin-left: auto;
+}
+
+.right-navbar .button-right {
+  display: flex;
+  align-items: center;
+}
+
+.right-navbar button {
+  cursor: pointer;
+}
+
+.sign-up {
+  padding: 10px 35px;
+  margin: 10px;
+  text-transform: uppercase;
+  font-weight: 600;
+  font-family: "Work Sans", sans-serif;
+  border: 1px solid rgb(255, 255, 255);
+  background-color: transparent;
+  color: white;
+  text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7);
+  border-radius: 4px;
+  white-space: nowrap;
+}
+
+.sign-up:hover {
+  background-color: rgba(0, 0, 0, 0.747);
+}
+
+.user-acc {
+  padding: 10px;
+  margin: 10px;
+  border-radius: 50%;
+  border: 1px solid rgb(255, 255, 255);
+  background-color: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.user-acc:hover {
+  background-color: rgba(0, 0, 0, 0.747);
+}
+
+.user-acc img {
+  filter: invert(1);
+  transform: scale(1);
+  z-index: 3;
+  transition: all 0.6s ease-out;
+}
+
+.user-acc img:hover {
+  transform: scale(1.2);
+}
+
+/* FIX: hamburger toggle for small screens (was missing entirely — the old CSS relied on
+   pure horizontal scroll of the whole navbar, which is a rough experience) */
+.nav-toggle {
+  display: none;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  color: white;
+  font-size: 22px;
+  border-radius: 6px;
+  padding: 4px 10px;
+  cursor: pointer;
+}
+
+.mid-main-content {
+  position: relative; 
+  width: 98%;
+  margin-left: 15px;
+  margin-top: 180px;
+  padding: 20px;
+  z-index: 3;
+  color: white;
+  text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7);
+  font-weight: bold;
+}
+
+.mid-main-content h1 {
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  margin-bottom: 15px;
+  font-family: "Rubik", sans-serif;
+  display: flex;
+  justify-content: center;
+  text-align: center;
+}
+
+.mid-main-content h4 {
+  font-family: "Work Sans", sans-serif;
+  display: flex;
+  font-size: clamp(1rem, 3vw, 1.5rem);
+  margin-bottom: 15px;
+  font-weight: 300;
+  justify-content: center;
+  text-align: center;
+}
+
+.mid-main-content h3 {
+  font-family: "Work Sans", sans-serif;
+  display: flex;
+  white-space: normal; 
+  font-size: clamp(0.9rem, 2.5vw, 1.2rem);
+  font-weight: 400;
+  text-align: center;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+div marquee {
+  position:absolute;
+  margin-top:50px;
+  z-index:10;
+}
+
+.hero-section {
+  position: relative;
+  width: 100%;
+  min-height: 150px; 
+  height: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  padding: 30px 0;
+}
+
+.text-banner {
+  width: 100%;
+  max-width: 700px;
+  position: relative; 
+  z-index: 1;
+  background: rgba(0, 0, 0, 0.6);
+  color: white;
+  padding: 20px 40px;
+  text-align: center;
+  border-radius: 8px;
+  margin: 0 20px;
+}
+
+.text-banner h1 {
+  margin: 0 0 10px 0;
+  font-size: clamp(18px, 4vw, 24px);
+}
+
+.text-banner p {
+  margin: 0;
+  font-size: clamp(13px, 2.5vw, 16px);
+  opacity: 0.9;
+}
+
+
+/*SLIDER*/
+
+.slider {
+  position: relative;
+  height: 100vh;
+}
+
+.slider .list .item {
+  position: absolute;
+  inset: 0 0 0 0;
+  overflow: hidden;
+  opacity: 0;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: 0.5s;
+}
+
+.slider .list .item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.slider .list .item::after {
+  content: '';
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  z-index: 2;
+  background-image: linear-gradient(to top, rgba(0, 0, 0, 0.744) 20%, transparent);
+}
+
+.slider .list .item .content {
+  position: absolute;
+  z-index: 1;
+  left: 10%;
+  top: 20%;
+  width: 500px;
+  text-align: center;
+  max-width: 80%;
+  background-color: transparent;
+  backdrop-filter: blur(0);
+  border: none;
+}
+
+.slider .list .item .content p {
+  font-size: clamp(1rem, 2vw, 1.25rem);
+}
+
+.slider .list .item .content p:nth-child(1) {
+  text-transform: uppercase;
+}
+
+.slider .list .item .content h2 {
+  font-size: clamp(2rem, 6vw, 5rem); 
+  margin: 0;
+  white-space: normal;
+  animation-delay: 0.2s;
+}
+
+.slider .list .item .content p:nth-child(3) {
+  animation-duration: .3s;
+}
+
+.slider .list .item.active {
+  opacity: 1;
+  z-index: 10;
+}
+
+@keyframes showContent {
+  to {
+    transform: translateY(0);
+    filter: blur(0);
+    opacity: 1;
+  }
+}
+
+.slider .list .item.active .content {
+  position: absolute;
+  z-index: 20;
+  left: 10%;
+  top: 20%;
+  width: 500px;
+  max-width: 80%;
+  display: block !important;
+  animation: showContent 0.3s 0.5s ease-in-out 1 forwards;
+}
+
+.slider .list .item.active .content p:nth-child(1),
+.slider .list .item.active .content h2,
+.slider .list .item.active .content p:nth-child(3) {
+  color: white;
+  transform: translateY(30px);
+  filter: blur(20px);
+  opacity: 0;
+  animation: showContent 0.2s 0.2s ease-in-out 1 forwards;
+}
+
+.arrow {
+  position: absolute;
+  z-index: 30;
+  top: 50%;
+  transform: translateY(-50%);
+  left: 3%;
+  right: 3%;
+  display: flex;
+  justify-content: space-between;
+  pointer-events: none;
+}
+
+.arrow button {
+  background-color: rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  font-size: 1.5rem;
+  color: #eee;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  pointer-events: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.arrow button:hover {
+  background-color: #ffffff;
+  color: #000000;
+  transform: scale(1.1);
+}
+
+.thumbnail {
+  position: absolute;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 30;
+  display: flex;
+  gap: 15px;
+  width: 90%;
+  max-width: 800px;
+  overflow-x: auto;
+  padding: 10px 0;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  justify-content: safe center;
+}
+
+.thumbnail::-webkit-scrollbar {
+  display: none; 
+}
+
+.thumbnail {
+  scrollbar-width: none; 
+}
+
+.thumbnail .item {
+  filter: brightness(0.4);
+  position: relative;
+  flex-shrink: 0;
+  transition: transform 0.4s ease, filter 0.4s ease;
+  width: 120px;
+  height: 170px;
+  scroll-snap-align: center;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.thumbnail .item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.thumbnail .item.active {
+  filter: brightness(1.1);
+  border: 2px solid white;
+  transform: scale(1.05);
+}
+
+.thumbnail .item .content {
+  position: absolute;
+  inset: auto 10px 15px 10px;
+  color: #ffffff !important;
+  font-family: "Work Sans", sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.9);
+  text-align: center;
+  z-index: 5; 
+  display: block !important;
+  width: 70%;
+  background-color: transparent;
+  border: none;
+  animation: showContent 0.3s 0.5s ease-in-out 1 forwards;
+}
+
+@media (max-width: 1024px) {
+  .mid-nav {
+    column-gap: 20px;
+  }
+
+  .dropBtn {
+    font-size: 14px;
+  }
+
+  .slider .list .item .content,
+  .slider .list .item.active .content {
+    width: 60%;
+  }
+}
+
+@media (max-width: 768px) {
+  .navbar {
+    padding: 15px;
+    position: relative;
+  }
+
+  .nav-toggle {
+    display: inline-block;
+  }
+
+  .middle-navbar {
+    display: none;
+    width: 100%;
+    order: 3;
+  }
+
+  .middle-navbar.open {
+    display: flex;
+  }
+
+  .mid-nav {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    width: 100%;
+    margin: 15px 0 0 0;
+  }
+
+  .dropdown {
+    width: 100%;
+  }
+
+  .contentBar {
+    position: static;
+    width: 100%;
+    display: none;
+  }
+
+  .dropdown.open .contentBar {
+    display: flex;
+  }
+
+  .dropBtn {
+    font-size: 15px;
+    display: block;
+    padding: 6px 0;
+  }
+
+  .thumbnail {
+    width: 84%;
+  }
+}
+
+@media (max-width: 480px) {
+  .left-navbar {
+    margin-right: 10px;
+  }
+
+  .navbar {
+    flex-wrap: wrap;
+    gap: 5px;
+    align-items: center;
+    justify-content: space-between;
+    padding: 15px 10px;
+    z-index: 100;
+    border-radius: 0px;
+  }
+
+  .slider .list .item .content {
+    left: 5%;
+    right: 5%;
+    width: auto;
+    max-width: 90%;
+  }
+
+  .arrow {
+    top: 40%;
+    width: 90%;
+  }
+
+  .thumbnail {
+    width: 90%;
+    left: 50%;
+    bottom: 20px;
+  }
+
+  .text-banner {
+    padding: 15px 20px;
+  }
+}

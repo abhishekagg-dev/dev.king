@@ -1,0 +1,129 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+body {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f4f4f4;
+}
+
+.login-container {
+    display: flex;
+    width: 800px;
+    height: 500px;
+    background: white;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.login-image {
+    flex: 1;
+    background: url('place-1.png');
+    background-size: cover;
+    display: flex;
+    padding: 40px;
+}
+
+
+
+.login-form {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px;
+}
+
+.form-wrapper {
+    width: 100%;
+    max-width: 320px;
+}
+
+h1 {
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.input-group {
+    position: relative;
+    margin-bottom: 20px;
+    width: 100%;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 14px 10px;
+    margin: 0;
+    font-size: 16px;
+    outline: none;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background: transparent;
+}
+
+.input-group label {
+    position: absolute;
+    top: 50%;
+    left: 10px;
+    transform: translateY(-50%);
+    pointer-events: none;
+    padding: 0 5px;
+    background: white;
+    color: #888;
+    transition: 0.3s;
+}
+
+.input-group input:focus+label,
+.input-group input:valid+label {
+    top: 0;
+    font-size: 12px;
+    color: #007bff;
+}
+
+.forgot-link {
+    display: block;
+    margin-bottom: 15px;
+    font-size: 0.9em;
+    color: #333;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.first-btn {
+    width: 100%;
+    padding: 12px;
+    background: #2ecc71;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.divider {
+    text-align: center;
+    margin: 20px 0;
+    color: #888;
+}
+
+.scnd-btn {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    background: white;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.text {
+    margin-top: 20px;
+    font-size: 0.9em;
+    text-align: center;
+}
